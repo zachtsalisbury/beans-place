@@ -148,23 +148,110 @@ export default function HeroSection() {
                     animate="visible">
                     {/* Each <motion.span> is one animated word using "wordVariant 
                     display:"inline-block" is required so y/rotateX transform work */}
-                    <motion.span varaints= {wordVariant} style={{display: "inline-block"}}>
+                    <motion.span varaints={wordVariant} style={{ display: "inline-block" }}>
                         Your Place
                     </motion.span>
                     <br />
                     <motion.span
-                    variants={wordVariant}
-                    className="muted"
-                    style={{dslpay: "inline-block"}}>
+                        variants={wordVariant}
+                        className="muted"
+                        style={{ dslpay: "inline-block" }}>
                         FOR COFFEE
                     </motion.span>
-                    <br/>
+                    <br />
                     <motion.span
-                    variants={wordVariant}
-                    style={{display = "inline-block"}}>
+                        variants={wordVariant}
+                        style={{ display: "inline-block" }}>
                         BREWING
                     </motion.span>
-                    </motion.h1>
+                </motion.h1>
+
+                {/* Descriptive paragraph under the headline. Delay: 0.6 seconds, makes it fade in a little after the headline */}
+
+                <motion.p
+                    className="lead"
+                    stytle={{ marginTop: 18 }}
+                    intial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}>
+                    Farm-to-cup single-origin beans from Ethiopia, Columbia & Beyond. Freshley roasted in small batchess and shipped to your door within 48 hours.
+                </motion.p>
+                {/* Container holding the two call to action buttons */}
+                <motion.div
+                    className="hero-actions"
+                    intial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 }}>
+                    {/* Shop coffee button. onclick finds the element with the ID="shop" and smoothly scrolls to it. The ?. (optional chaining) avoids an error if that element doesnt exist */}
+                    <Button
+                        variant="accent"
+                        size="lg"
+                        className="shadow-lg"
+                        onClick={() => document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" })}>
+                        SHOP COFFEE
+                    </Button>
+
+
+                    {/* Our Story Button - same idea but scrolls to the id="about" section */}
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}>
+                        OUR STORY
+                    </Button>
+                </motion.div>
+
+                {/* Trust indicators - small reassurance text (rating= free shipping). Delay: 1:1 means it appears last, after the buttons */}
+                <motion.div
+                    className="hero-trust"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 1.1 }}>
+                    <span>★★★★★ 4.9/5 from 2,400+ customers</span>
+                    {/* a visual seperator line between the two stats */}
+                    <span className="hero-trust-divider">|</span>
+                    <span>Free Shipping over $50</span>
+                </motion.div>
+            </div>
+
+            {/* Right Side: hero beans image */}
+            <div className="hero-art-container">
+                {/* Main image
+                -style connects the scroll linked value from above
+                -initial/animate handles the one time entrance animation on page load*/}
+                <motion.img
+                    className="hero-art"
+                    src={heroBeans}
+                    alt="Premium Coffee Beans"
+                    style={{
+                        scale: imgScale, // scroll linked shrink (safe: inside a {} JS object)
+                        opacity: imgOpacity,// scroll linked fade
+                        y: imgy //scroll linked downward drift
+                    }}
+                    initial={{ opacity: 0, scale: 0.8, x: 60 }}
+                    animate={{ opacity: 1, scale: 1.35, x: 0 }}
+                    transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                />
+                
+                {/* floating price badge that pops on to the image.
+                type: spring + stiffness to give a bouncy motion
+                delay: 1.2 waits until the image has arrived */}
+                <motion.div
+                className="hero-floating-badge"
+                initial={{opacity:0, scale: 0.5}}
+                animate={{opacity: 1, scale: 1}}
+                transition={{
+                    duration: 0.5,
+                    delay: 1.2,
+                    type:"spring",
+                    stiffness: 200
+                }}>
+                    <span className="hero-floating-badge-label">FROM</span>
+                    <span className="hero-floating-badge-price">$14.99</span>
+                    <span className="hero-floating-badge-label">per bag</span>
+                </motion.div>
+                
+                
             </div>
         </>
     );

@@ -131,7 +131,7 @@ export default function HeroSection() {
                 {/* Badge (small pill at the top) initial = where it starts, animate = where it ends up. Here:fade in + slide up over 0.5s */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 0, y: 0 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transtion={{ duration: 0.5, delay: 0.1 }}>
                     <Badge variant="outline" className="mb-5">
                         Premium Coffe Beans - Roasted Fresh Daily
@@ -250,8 +250,6 @@ export default function HeroSection() {
                     <span className="hero-floating-badge-price">$14.99</span>
                     <span className="hero-floating-badge-label">per bag</span>
                 </motion.div>
-                
-                
             </div>
         </>
     );

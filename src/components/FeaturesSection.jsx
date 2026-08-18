@@ -32,7 +32,22 @@
 //   imgColombianSupremo, imgEthiopianHarrar, imgArabianMocha
 
 /* --- YOUR IMPORTS GO HERE --- */
-
+import { useEffect, useRef, useState } from "react";
+import imgRedSulawesi from "../assets/Red-Sulawesi-Bag.png";
+import imgUrigacheffe from "../assets/Urigacheffe-Bag.png";
+import imgTanzaniaPeaberry from "../assets/Tanzania-Peaberry-Bag.png";
+import imgPanamaGeisha from "../assets/Panama-Geisha.png";
+import imgVietnameserobusta from "../assets/Vietnamese-Robusta.png";
+import imgBrazilianSantos from "../assets/Brazilian-Santos-Bag.png";
+import imgCostaRicaTarrazu from "../assets/Costa-Rica-Tarrazu-Bag.png";
+import imgGuatemalaAntigua from "../assets/Guatemala-Antigua-Bag.png";
+import imgKenyaAA from "../assets/Kenya-AA-Bag.png";
+import imgSumatraMandheling from "../assets/Sumatra-Mandheling-Bag.png";
+import imgKona from "../assets/Kona-Bag.png";
+import imgJamaicanBlueMountain from "../assets/Jamaican-Blue-Mountain-Bag.png";
+import imgColombianSupremo from "../assets/Colombian-Supremo-Bag.png";
+import imgEthiopianHarrar from "../assets/Ethiopian-Harrar-Bag.png";
+import imgArabianMocha from "../assets/Arabian-Mocha-Bag.png";
 
 // STEP 2: Define three row arrays (outside the component)
 // Each row contains the same images but in different orders.
@@ -43,7 +58,6 @@
 // const row3 = [imgGuatemalaAntigua, imgJamaicanBlueMountain, ...];
 
 /* --- YOUR ROW ARRAYS GO HERE --- */
-
 
 // STEP 3: ImageRow helper component
 // function ImageRow({ images, speed = -0.25, offset = 0 }) { ... }
@@ -63,7 +77,6 @@
 // about to enter the viewport, improving performance.
 
 /* --- YOUR IMAGEROW COMPONENT GOES HERE --- */
-
 
 // STEP 4: Create and export FeaturesSection
 // export default function FeaturesSection() { ... }
@@ -90,3 +103,130 @@
 //      </section>
 
 /* --- YOUR COMPONENT CODE GOES HERE --- */
+// All three rows hold the same 15 bags in different orders so the rows dont look like copies of eachother as they slide past
+const row1 = [
+    imgJamaicanBlueMountain,
+    imgEthiopianHarrar,
+    imgGuatemalaAntigua,
+    imgTanzaniaPeaberry,
+    imgColombianSupremo,
+    imgVietnameserobusta,
+    imgKona,
+    imgArabianMocha,
+    imgKenyaAA,
+    imgUrigacheffe,
+    imgSumatraMandheling,
+    imgPanamaGeisha,
+    imgRedSulawesi,
+    imgCostaRicaTarrazu,
+    imgBrazilianSantos
+];
+
+const row2 = [
+    imgKenyaAA,
+    imgSumatraMandheling,
+    imgVietnameserobusta,
+    imgArabianMocha,
+    imgPanamaGeisha,
+    imgGuatemalaAntigua,
+    imgJamaicanBlueMountain,
+    imgColombianSupremo,
+    imgUrigacheffe,
+    imgTanzaniaPeaberry,
+    imgEthiopianHarrar,
+    imgKona,
+    imgRedSulawesi,
+    imgBrazilianSantos,
+    imgCostaRicaTarrazu
+];
+
+const row3 = [
+    imgGuatemalaAntigua,
+    imgJamaicanBlueMountain,
+    imgEthiopianHarrar,
+    imgKona,
+    imgUrigacheffe,
+    imgTanzaniaPeaberry,
+    imgKenyaAA,
+    imgColombianSupremo,
+    imgVietnameserobusta,
+    imgSumatraMandheling,
+    imgPanamaGeisha,
+    imgArabianMocha,
+    imgRedSulawesi,
+    imgCostaRicaTarrazu,
+    imgBrazilianSantos
+];
+
+// Draws one horizontal row. local to this file since nothing else uses it
+// images -> which array of photos to show
+// offset_> how far to slide the row sideways right now, in pixels
+
+function ImageRow({ images, offset = 0 }) {
+    // Double the list so the row is always wide enough to show no gaps
+
+    const doubled = [...images, ...images];
+
+    return (
+        // translate3d slides the row and runs on the GPU, which keeps it smooth
+        <div className="carousel-row" style={{ transform: `translate3d(${offset}px, 0, 0)` }}>
+            {doubled.map((src, index) => (
+                // Index is a safe key here: the list never reorders
+                <div className="carousel-card" key={`${index}`}>
+                    <img
+                        src={src}
+                        // % (modulo) wraps the count, so the duplicated half reuses labels 1-15 instead of running on to 30
+                        alt={`Coffee Bag ${(index % images.length) + 1}`}
+                        className="carousel-image"
+                        loading="lazy"
+                    />
+                </div>
+            ))}
+        </div>
+    );
+}
+
+export default function FeaturesSection() {
+    const sectionRef = useRef(null);
+
+    //Hoe far each row is slid sideways
+    const [offsets, setOffsets] = useState([0, 0, 0]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!sectionRef.current) return;
+
+            const rect = sectionRef.current.getBoundingClientRect();
+            const viewH = window.innerHeight;
+
+            // o when the section enters the bottom
+            const progress = 1 - rect.bottom / (viewH + rect.height);
+            // ...clamped so it can never go below zero
+            const p = Math.max(0, Math.min(1, progress));
+
+            const range = Math.min(window.innerWidth * 0.5, 600);
+
+            setOffsets([
+                -p * range, //row 1: left
+                p * range - range, //row 2: right, starting offset left
+                -p * range * 0.7 // row 3: left, slower
+            ]);
+        };
+
+        // Run once so the row sit correctly before any scrolling happens
+        handleScroll();
+        // {passive: true} prmoise we wont block scrolling, keeoing it smooth
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    return (
+        <section className="carousel-gallery-section" ref={sectionRef}>
+            <div className="carousel-gallery-container">
+                <ImageRow images={row1} offset={offsets[0]} />
+                <ImageRow images={row2} offset={offsets[1]} />
+                <ImageRow images={row3} offset={offsets[2]} />
+            </div>
+        </section>
+    );
+}

@@ -196,18 +196,24 @@ export default function NavBar() {
                             <a href="#shop" onClick={closeMenu} className="text-base font-semibold">
                                 Shop Coffee
                             </a>
-                            <a href="#about" onClick={closeMenu} className="text-base font-semibold">
+                            <a
+                                href="#about"
+                                onClick={closeMenu}
+                                className="text-base font-semibold">
                                 Our Story
                             </a>
-                            <a href="#contact" onClick={closeMenu} className="text-base font-semibold">
+                            <a
+                                href="#contact"
+                                onClick={closeMenu}
+                                className="text-base font-semibold">
                                 Contact
                             </a>
                             {/* w-full makes teh button stretch the full menu width */}
-                            <Button 
-                            variant="accent"
-                            size="sm"
-                            className="mt-2 w-full"
-                            onClick={closeMenu}>
+                            <Button
+                                variant="accent"
+                                size="sm"
+                                className="mt-2 w-full"
+                                onClick={closeMenu}>
                                 Order Now
                             </Button>
                         </nav>
